@@ -34,8 +34,10 @@ Emittery                  = require 'emittery'
 
 ## Xemitter
 
-xemitter uses `sindresorhus/emittery` to provide an event emitter and task delegation facility that
-simplifies building asynchronous applications using the Actor pattern.
+xemitter uses
+[`sindresorhus/emittery`](https://github.com/sindresorhus/emittery) to provide
+an event emitter and task delegation facility that simplifies building
+asynchronous applications using the Actor pattern.
 
 Events are pairs of channel names and arbitrary data items. Events are emitted by emitter functions.
 
@@ -77,7 +79,6 @@ sample_delegator()
 ```coffee
 # xemitter
 
-
 #-----------------------------------------------------------------------------------------------------------
 @_emitter = new Emittery()
 @_has_primary_listeners = {}
@@ -90,15 +91,15 @@ sample_delegator()
 
 #-----------------------------------------------------------------------------------------------------------
 @primary_on = ( channel, listener ) ->
-if @_has_primary_listeners[ channel ]
-  throw new Error "channel #{rpr channel} already has a primary listener"
-@_has_primary_listeners[ channel ] = yes
-@_emitter.on channel, ( data ) =>
-  return @_mark_as_primary await listener data
+    if @_has_primary_listeners[ channel ]
+      throw new Error "channel #{rpr channel} already has a primary listener"
+    @_has_primary_listeners[ channel ] = yes
+    @_emitter.on channel, ( data ) =>
+      return @_mark_as_primary await listener data
 
 #-----------------------------------------------------------------------------------------------------------
 @also_on = ( channel, listener ) ->
-@_emitter.on channel, listener
+    @_emitter.on channel, listener
 
 #-----------------------------------------------------------------------------------------------------------
 @emit     = ( channel, data ) ->               @_emitter.emit channel, data
@@ -108,9 +109,9 @@ if @_has_primary_listeners[ channel ]
 
 ############################################################################################################
 for name, value of L = @
-### TAINT poor man's 'callable' detection ###
-continue unless CND.isa_function value.bind
-L[ name ] = value.bind L
+    ### TAINT poor man's 'callable' detection ###
+    continue unless CND.isa_function value.bind
+    L[ name ] = value.bind L
 ```
 
 ```coffee
@@ -141,6 +142,8 @@ also_on 'some_task_B', ( data ) ->
   debug 'on some_task_B', jr data
   return 'a secondary result'
 ```
+
+## Example A
 
 ```coffee
 # use_sample_delegator_A
@@ -175,6 +178,7 @@ sample_delegator_A()
 .catch error_handler
 ```
 
+## Example B
 ```coffee
 # use_sample_delegator_B
 
@@ -182,57 +186,58 @@ sample_delegator_A()
 ### Synchronous contractors without promises and asynchronous contractors with promises show the same
 behavior; crucially, **the delegator does not have to be aware of any difference between the two**: ###
 if settings.use_promises_in_contractor
-info "using contractor with promises"
-#-----------------------------------------------------------------------------------------------------------
-primary_on 'some_task_B', ( data ) ->
-  debug 'on some_task_B', jr data
-  return new Promise ( resolve, reject ) ->
-    [ a, b, ] = data
-    return reject new_failure 'divbyzero', "division by zero: #{rpr a} / #{rpr b}", null if b is 0
-    resolve a / b
+  info "using contractor with promises"
+  #-----------------------------------------------------------------------------------------------------------
+  primary_on 'some_task_B', ( data ) ->
+    debug 'on some_task_B', jr data
+    return new Promise ( resolve, reject ) ->
+      [ a, b, ] = data
+      return reject new_failure 'divbyzero', "division by zero: #{rpr a} / #{rpr b}", null if b is 0
+      resolve a / b
 else
-info "using contractor *without* promises"
-#-----------------------------------------------------------------------------------------------------------
-primary_on 'some_task_B', ( data ) ->
-  debug 'on some_task_B', jr data
-  [ a, b, ] = data
-  throw new_failure 'divbyzero', "division by zero: #{rpr a} / #{rpr b}", null if b is 0
-  return a / b
+  info "using contractor *without* promises"
+
+  #-----------------------------------------------------------------------------------------------------------
+  primary_on 'some_task_B', ( data ) ->
+    debug 'on some_task_B', jr data
+    [ a, b, ] = data
+    throw new_failure 'divbyzero', "division by zero: #{rpr a} / #{rpr b}", null if b is 0
+    return a / b
 
 #-----------------------------------------------------------------------------------------------------------
 sample_delegator_B = ->
-try
-  #.......................................................................................................
-  info "computing 4 / 5"
-  result_1 = await delegate 'some_task_B', [ 4, 5, ]
-  info "computing 4 / 5: #{result_1}"
-  #.......................................................................................................
-  info "computing 3 / 0"
-  result_2 = await delegate 'some_task_B', [ 3, 0, ]
-  info "computing 3 / 0: #{result_2}"
-  #.......................................................................................................
-  # In the case of a style B contractor, only happy results are resolved; sad and bad results are
-  # rejected and end up in the catch clause:
-  return [ result_1, result_2, ]
-catch unhappy
-  warn '28921', unhappy
-  if is_sad unhappy
-    # deal with failures: possibly log where and what occurred, return a replacement value (that may in
-    # itself by happy or sad):
-    result_2 = happy unhappy
-    urge "computing 3 / 0: #{result_2}"
-    urge 'sample_delegator_B sad result:    ', jr unhappy
-    return null
-  # refuse to deal with anything else:
-  throw unhappy
+  try
+    #.......................................................................................................
+    info "computing 4 / 5"
+    result_1 = await delegate 'some_task_B', [ 4, 5, ]
+    info "computing 4 / 5: #{result_1}"
+    #.......................................................................................................
+    info "computing 3 / 0"
+    result_2 = await delegate 'some_task_B', [ 3, 0, ]
+    info "computing 3 / 0: #{result_2}"
+    #.......................................................................................................
+    # In the case of a style B contractor, only happy results are resolved; sad and bad results are
+    # rejected and end up in the catch clause:
+    return [ result_1, result_2, ]
+  catch unhappy
+    warn '28921', unhappy
+    if is_sad unhappy
+      # deal with failures: possibly log where and what occurred, return a replacement value (that may in
+      # itself by happy or sad):
+      result_2 = happy unhappy
+      urge "computing 3 / 0: #{result_2}"
+      urge 'sample_delegator_B sad result:    ', jr unhappy
+      return null
+    # refuse to deal with anything else:
+    throw unhappy
 
 #-----------------------------------------------------------------------------------------------------------
 sample_delegator_B()
-.then ( x ) ->
-  return error_handler x if is_sad x
-  # xxx
-  help 'resolved', jr x
-.catch error_handler
+  .then ( x ) ->
+    return error_handler x if is_sad x
+    # xxx
+    help 'resolved', jr x
+  .catch error_handler
 ```
 
 ```coffee
