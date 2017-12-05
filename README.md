@@ -32,10 +32,8 @@ jr                        = JSON.stringify
 Emittery                  = require 'emittery'
  -->
 
-```coffee
-# xemitter
+## Xemitter
 
-###
 xemitter uses `sindresorhus/emittery` to provide an event emitter and task delegation facility that
 simplifies building asynchronous applications using the Actor pattern.
 
@@ -56,7 +54,7 @@ hand, up to one listener may bind to a channel using `XMT.primary_on`. Whatever 
 produces when answering an event will be wrapped into a nonce object. The delegator then uses `await
 XMT.delegate` or `XMT.select await XMT.emit` to retrieve up to one primary item from the event results:
 
-```
+```coffee
 # define a function that delegates some task:
 sample_delegator = ->
 result = await delegate 'some_task', 42
@@ -76,7 +74,9 @@ sample_delegator()
 ```
 
 
-###
+```coffee
+# xemitter
+
 
 #-----------------------------------------------------------------------------------------------------------
 @_emitter = new Emittery()
