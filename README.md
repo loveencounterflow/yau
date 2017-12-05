@@ -32,10 +32,10 @@ jr                        = JSON.stringify
 Emittery                  = require 'emittery'
  -->
 
-```
+```coffee
 # xemitter
-###
 
+###
 xemitter uses `sindresorhus/emittery` to provide an event emitter and task delegation facility that
 simplifies building asynchronous applications using the Actor pattern.
 
@@ -113,7 +113,7 @@ continue unless CND.isa_function value.bind
 L[ name ] = value.bind L
 ```
 
-```
+```coffee
 { select, emit, delegate, also_on, primary_on, } = require 'xemitter'
 
 #-----------------------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ also_on 'some_task_B', ( data ) ->
   return 'a secondary result'
 ```
 
-```
+```coffee
 # use_sample_delegator_A
 
 #-----------------------------------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ sample_delegator_A()
 .catch error_handler
 ```
 
-```
+```coffee
 # use_sample_delegator_B
 
 #===========================================================================================================
@@ -235,7 +235,7 @@ sample_delegator_B()
 .catch error_handler
 ```
 
-```
+```coffee
 use_sample_delegator_A()
 use_sample_delegator_B { use_promises_in_contractor: yes, }
 use_sample_delegator_B { use_promises_in_contractor: no, }
