@@ -1,0 +1,30 @@
+{
+  "name": "yau",
+  "version": "0.0.1",
+  "description": "yet another actor utility",
+  "main": "lib/main.js",
+  "scripts": {
+    "test": "npm run build && tap --harmony lib/tests/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loveencounterflow/yau.git"
+  },
+  "keywords": [
+    "actors",
+    "promises",
+    "async",
+    "await",
+    "delegators",
+    "contractors"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/loveencounterflow/yau/issues"
+  },
+  "homepage": "https://github.com/loveencounterflow/yau#readme",
+  "dependencies": {
+    "cnd": "^4.3.1"
+  }
+}
