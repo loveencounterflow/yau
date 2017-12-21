@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/loveencounterflow/yau#readme",
   "dependencies": {
-    "cnd": "^4.3.1"
+    "cnd": "^4.3.1",
+    "emittery": "^0.2.0"
   }
 }

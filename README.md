@@ -246,8 +246,32 @@ use_sample_delegator_B { use_promises_in_contractor: yes, }
 use_sample_delegator_B { use_promises_in_contractor: no, }
 ```
 
+Synchronous contractors without promises and asynchronous contractors with
+promises show the same behavior; crucially, **the delegator does not have to be
+aware of any difference between the two**
 
 
+```coffee
+@emit     = ( channel, data ) ->                                await @_emitter.emit channel, data
+@entrust  = ( channel, data ) ->                  @_get_primary await @_emitter.emit channel, data
+@delegate = ( channel, data ) -> @reject_unhappy  @_get_primary await @_emitter.emit channel, data
+```
+
+**### TAINT must consider case where no listener is available which leads to defect or a crash**
+
+* `emit`:     Send out some (optional) data on a named channel, await all the results.
+* `entrust`:  Send out some (optional) data on a named channel, await the primary result or `null` if no-one listened;
+  where a contractor returns or resolves to an unhappy result, handling is up to the delegator.
+* `delegate`: Send out some (optional) data on a named channel, await the primary result or `null` if no-one listened;
+  where a contractor returns or resolves to an unhappy result, an exception is thrown so that all unhappy outcomes
+  have to be dealt with either in a `catch` block (or in the `.catch()` method).
+
+
+### Links
+
+* [The Marvellously Mysterious JavaScript Maybe Monad](https://jrsinclair.com/articles/2016/marvellously-mysterious-javascript-maybe-monad/)
+* [Understand promises before you start using async/await](https://medium.com/@bluepnume/learn-about-promises-before-you-start-using-async-await-eb148164a9c8)
+* [emittery](https://medium.com/@bluepnume/learn-about-promises-before-you-start-using-async-await-eb148164a9c8)
 
 
 
