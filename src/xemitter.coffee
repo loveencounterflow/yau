@@ -65,7 +65,7 @@ Emittery                  = require 'emittery'
   return listener
 
 #-----------------------------------------------------------------------------------------------------------
-@listen = ( channel, ctx, listener ) ->
+@listen_to = ( channel, ctx, listener ) ->
   [ channel, ctx, listener, ] = @_get_ccl arguments...
   @_emitter.on channel, ( data ) -> await listener.call ctx, data
   return listener
