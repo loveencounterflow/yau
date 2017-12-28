@@ -1,6 +1,6 @@
 {
   "name": "yau",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "yet another actor utility",
   "main": "lib/main.js",
   "scripts": {
