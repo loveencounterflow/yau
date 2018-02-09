@@ -90,6 +90,9 @@ get_location = ( delta = 0 ) ->
 @is_unhappy   = ( x ) -> ( @is_sad x ) or ( CND.isa_jserror x )
 
 #-----------------------------------------------------------------------------------------------------------
+@þ = @thorn ( x ) -> unless @is_happy x then throw x else return x
+
+#-----------------------------------------------------------------------------------------------------------
 @_get_cmad = ( P... ) ->
   switch arity = P.length
     when 0 then [ code, message, advice, delta, ] = [ 'crash', "an unrecoverable condition occurred", null, 1, ]
